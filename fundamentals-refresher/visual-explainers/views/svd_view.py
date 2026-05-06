@@ -8,7 +8,7 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
-from views._helpers import LabeledSlider
+from views._helpers import LabeledSlider, MatrixSliders
 
 
 class SVDDemo(ttk.Frame):
@@ -27,14 +27,12 @@ class SVDDemo(ttk.Frame):
     def _build_controls(self) -> None:
         bar = ttk.Frame(self, padding=(8, 8))
         bar.pack(side="top", fill="x")
-        for label, var in [
-            ("A[0,0]", self.a11), ("A[0,1]", self.a12),
-            ("A[1,0]", self.a21), ("A[1,1]", self.a22),
-        ]:
-            LabeledSlider(
-                bar, label, var, -3, 3, length=120,
-                command=lambda *_: self._recompute(),
-            ).pack(side="left", padx=6)
+        MatrixSliders(
+            bar,
+            vars_grid=[[self.a11, self.a12], [self.a21, self.a22]],
+            from_=-3, to=3, name="A",
+            command=lambda *_: self._recompute(),
+        ).pack(side="left", padx=6)
 
         ttk.Separator(bar, orient="vertical").pack(side="left", fill="y", padx=8)
         ttk.Button(bar, text="▶ Animate Vᵀ → Σ → U", command=self._animate).pack(side="left", padx=4)

@@ -59,3 +59,43 @@ class LabeledSlider(ttk.Frame):
 
     def _on_var_change(self, *_: object) -> None:
         self._value_lbl.configure(text=self._format())
+
+
+class MatrixSliders(ttk.Frame):
+    """A grid of LabeledSliders arranged to mirror a matrix's shape.
+
+    `vars_grid` is a list of rows; each row is a list of tk variables. The
+    sliders end up at the same (row, col) position as the matrix entry they
+    edit, so the spatial layout itself shows what A[i, j] means.
+    """
+
+    def __init__(
+        self,
+        master: tk.Misc,
+        vars_grid: list[list[tk.DoubleVar | tk.IntVar]],
+        from_: float,
+        to: float,
+        name: str = "A",
+        length: int = 110,
+        command=None,
+    ) -> None:
+        super().__init__(master)
+        # Optional title above the grid
+        if name:
+            ttk.Label(
+                self,
+                text=f"matrix {name}  (label = [row, col])",
+                font=("Segoe UI", 9, "italic"),
+                foreground="#555",
+            ).grid(row=0, column=0, columnspan=len(vars_grid[0]), sticky="w", padx=2)
+        for r, row in enumerate(vars_grid, start=1):
+            for c, var in enumerate(row):
+                LabeledSlider(
+                    self,
+                    label=f"{name}[{r - 1},{c}]",
+                    var=var,
+                    from_=from_,
+                    to=to,
+                    length=length,
+                    command=command,
+                ).grid(row=r, column=c, padx=4, pady=2)
