@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# ML artifacts
+*.pkl
+*.h5
+*.ckpt
+*.safetensors
+mlruns/
+wandb/
+
+# PyInstaller artifacts (regenerate locally with build.bat)
+build/
+dist/
+*.spec
