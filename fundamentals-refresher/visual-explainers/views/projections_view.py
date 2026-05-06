@@ -8,6 +8,8 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
+from views._helpers import LabeledSlider
+
 
 class ProjectionsDemo(ttk.Frame):
     def __init__(self, master: tk.Misc) -> None:
@@ -23,20 +25,14 @@ class ProjectionsDemo(ttk.Frame):
     def _build_controls(self) -> None:
         bar = ttk.Frame(self, padding=(8, 8))
         bar.pack(side="top", fill="x")
-        ttk.Label(bar, text="target b:").pack(side="left", padx=(0, 4))
-        for label, var in [("x", self.bx), ("y", self.by)]:
-            box = ttk.Frame(bar); ttk.Label(box, text=label).pack()
-            ttk.Scale(box, from_=-5, to=5, variable=var, orient="horizontal", length=120,
-                      command=lambda *_: self._recompute()).pack()
-            box.pack(side="left", padx=6)
+        ttk.Label(bar, text="target b:", font=("Segoe UI", 9, "bold")).pack(side="left", padx=(0, 8))
+        LabeledSlider(bar, "b.x", self.bx, -5, 5, length=130, command=lambda *_: self._recompute()).pack(side="left", padx=6)
+        LabeledSlider(bar, "b.y", self.by, -5, 5, length=130, command=lambda *_: self._recompute()).pack(side="left", padx=6)
 
         ttk.Separator(bar, orient="vertical").pack(side="left", fill="y", padx=12)
-        ttk.Label(bar, text="direction u:").pack(side="left", padx=(0, 4))
-        for label, var in [("x", self.ux), ("y", self.uy)]:
-            box = ttk.Frame(bar); ttk.Label(box, text=label).pack()
-            ttk.Scale(box, from_=-5, to=5, variable=var, orient="horizontal", length=120,
-                      command=lambda *_: self._recompute()).pack()
-            box.pack(side="left", padx=6)
+        ttk.Label(bar, text="direction u:", font=("Segoe UI", 9, "bold")).pack(side="left", padx=(0, 8))
+        LabeledSlider(bar, "u.x", self.ux, -5, 5, length=130, command=lambda *_: self._recompute()).pack(side="left", padx=6)
+        LabeledSlider(bar, "u.y", self.uy, -5, 5, length=130, command=lambda *_: self._recompute()).pack(side="left", padx=6)
 
     def _build_plot(self) -> None:
         derivation = ttk.LabelFrame(self, text="  Calculation  ", padding=(12, 8))

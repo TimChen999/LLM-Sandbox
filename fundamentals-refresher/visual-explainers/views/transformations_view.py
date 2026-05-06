@@ -8,6 +8,8 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
+from views._helpers import LabeledSlider
+
 
 class TransformationsDemo(ttk.Frame):
     def __init__(self, master: tk.Misc) -> None:
@@ -29,13 +31,10 @@ class TransformationsDemo(ttk.Frame):
             ("A[0,0]", self.a11), ("A[0,1]", self.a12),
             ("A[1,0]", self.a21), ("A[1,1]", self.a22),
         ]:
-            box = ttk.Frame(bar)
-            ttk.Label(box, text=label).pack()
-            ttk.Scale(
-                box, from_=-2, to=2, variable=var, orient="horizontal", length=120,
-                command=lambda *_: self._recompute()
-            ).pack()
-            box.pack(side="left", padx=6)
+            LabeledSlider(
+                bar, label, var, -2, 2, length=130,
+                command=lambda *_: self._recompute(),
+            ).pack(side="left", padx=6)
 
         ttk.Separator(bar, orient="vertical").pack(side="left", fill="y", padx=8)
         ttk.Button(bar, text="▶ Animate identity → A", command=self._animate).pack(side="left", padx=4)

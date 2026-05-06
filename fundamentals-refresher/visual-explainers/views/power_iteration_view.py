@@ -9,6 +9,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
 from modules.linear_algebra import power_iteration, power_iteration_trajectory
+from views._helpers import LabeledSlider
 
 
 class PowerIterationView(ttk.Frame):
@@ -41,19 +42,10 @@ class PowerIterationView(ttk.Frame):
             ("A[1,0]", self.a21),
             ("A[1,1]", self.a22),
         ]:
-            box = ttk.Frame(bar)
-            ttk.Label(box, text=label).pack(side="top")
-            ttk.Scale(
-                box,
-                from_=-3.0,
-                to=3.0,
-                variable=var,
-                orient="horizontal",
-                length=110,
+            LabeledSlider(
+                bar, label, var, -3.0, 3.0, length=120,
                 command=lambda *_: self._recompute(),
-            ).pack(side="top")
-            self._value_label(box, var).pack(side="top")
-            box.pack(side="left", padx=6)
+            ).pack(side="left", padx=6)
 
         ttk.Separator(bar, orient="vertical").pack(side="left", fill="y", padx=8)
 
@@ -65,16 +57,9 @@ class PowerIterationView(ttk.Frame):
         ttk.Spinbox(
             bar, from_=1, to=100, textvariable=self.max_iters, width=4, command=self._recompute
         ).pack(side="left")
-        ttk.Label(bar, text="speed (ms):").pack(side="left", padx=(12, 4))
-        ttk.Scale(bar, from_=50, to=800, variable=self.speed_ms, orient="horizontal", length=120).pack(
-            side="left"
-        )
-
-    @staticmethod
-    def _value_label(parent, var):
-        lbl = ttk.Label(parent, text=f"{var.get():.2f}", width=5, anchor="center")
-        var.trace_add("write", lambda *_: lbl.configure(text=f"{var.get():.2f}"))
-        return lbl
+        LabeledSlider(
+            bar, "speed (ms)", self.speed_ms, 50, 800, length=140, fmt="{:.0f}",
+        ).pack(side="left", padx=(12, 0))
 
     def _build_plot(self) -> None:
         # Pack the status panel FIRST (side="bottom") so it's not squeezed by the

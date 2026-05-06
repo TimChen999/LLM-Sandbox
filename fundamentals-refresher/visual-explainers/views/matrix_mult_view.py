@@ -10,6 +10,7 @@ from matplotlib.figure import Figure
 from matplotlib.patches import Rectangle
 
 from modules.linear_algebra import matrix_multiply_steps
+from views._helpers import LabeledSlider
 
 
 class MatrixMultView(ttk.Frame):
@@ -55,10 +56,9 @@ class MatrixMultView(ttk.Frame):
         ttk.Button(bar, text="◀ Prev", command=self._step_back).pack(side="left", padx=2)
         ttk.Button(bar, text="Next ▶", command=self._step_forward).pack(side="left", padx=2)
 
-        ttk.Label(bar, text="speed (ms/step):").pack(side="left", padx=(16, 4))
-        ttk.Scale(
-            bar, from_=100, to=1500, variable=self.speed_ms, orient="horizontal", length=140
-        ).pack(side="left")
+        LabeledSlider(
+            bar, "speed (ms/step)", self.speed_ms, 100, 1500, length=160, fmt="{:.0f}",
+        ).pack(side="left", padx=(16, 4))
 
     def _build_plot(self) -> None:
         # IMPORTANT: pack the derivation panel FIRST (with side="bottom") so the

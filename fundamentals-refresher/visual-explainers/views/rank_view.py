@@ -8,6 +8,8 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
+from views._helpers import LabeledSlider
+
 
 class RankDemo(ttk.Frame):
     def __init__(self, master: tk.Misc) -> None:
@@ -24,13 +26,10 @@ class RankDemo(ttk.Frame):
         ttk.Label(bar, text="A (2×3) entries:", font=("Segoe UI", 9, "bold")).pack(side="left", padx=(0, 8))
         labels = ["A[0,0]", "A[0,1]", "A[0,2]", "A[1,0]", "A[1,1]", "A[1,2]"]
         for label, var in zip(labels, self.entries):
-            box = ttk.Frame(bar)
-            ttk.Label(box, text=label, font=("Segoe UI", 8)).pack()
-            ttk.Scale(
-                box, from_=-3, to=3, variable=var, orient="horizontal", length=80,
-                command=lambda *_: self._recompute()
-            ).pack()
-            box.pack(side="left", padx=2)
+            LabeledSlider(
+                bar, label, var, -3, 3, length=110,
+                command=lambda *_: self._recompute(),
+            ).pack(side="left", padx=4)
         ttk.Button(bar, text="Make rank 1", command=lambda: self._set_rank(1)).pack(side="left", padx=8)
         ttk.Button(bar, text="Make rank 2", command=lambda: self._set_rank(2)).pack(side="left", padx=4)
 

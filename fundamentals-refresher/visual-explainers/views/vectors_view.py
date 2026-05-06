@@ -8,6 +8,8 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
+from views._helpers import LabeledSlider
+
 
 class VectorsDemo(ttk.Frame):
     def __init__(self, master: tk.Misc) -> None:
@@ -29,18 +31,10 @@ class VectorsDemo(ttk.Frame):
             ("b.x", self.bx_var),
             ("b.y", self.by_var),
         ]:
-            box = ttk.Frame(bar)
-            ttk.Label(box, text=label).pack()
-            ttk.Scale(
-                box,
-                from_=-5,
-                to=5,
-                variable=var,
-                orient="horizontal",
-                length=140,
+            LabeledSlider(
+                bar, label, var, -5, 5, length=150,
                 command=lambda *_: self._recompute(),
-            ).pack()
-            box.pack(side="left", padx=10)
+            ).pack(side="left", padx=10)
 
     def _build_plot(self) -> None:
         derivation = ttk.LabelFrame(self, text="  Calculation  ", padding=(12, 8))
@@ -72,7 +66,7 @@ class VectorsDemo(ttk.Frame):
         ax.text(a[0] * 1.05, a[1] * 1.05, "a", color="C0", fontsize=14, fontweight="bold")
         ax.text(b[0] * 1.05, b[1] * 1.05, "b", color="C3", fontsize=14, fontweight="bold")
 
-        # projection of a onto b (if b nonzero)
+        # projection of a onto b (if b nonzero) — placed off to the side to avoid b's label
         if np.linalg.norm(b) > 1e-9:
             t = (a @ b) / (b @ b)
             p = t * b
@@ -82,7 +76,15 @@ class VectorsDemo(ttk.Frame):
                 angles="xy", scale_units="xy", scale=1, color="#888",
                 width=0.008, alpha=0.7,
             )
-            ax.text(p[0] * 1.05, p[1] * 1.05 - 0.2, "proj_b(a)", color="#666", fontsize=9)
+            b_unit = b / np.linalg.norm(b)
+            perp = np.array([-b_unit[1], b_unit[0]]) * 0.5
+            ax.annotate(
+                "proj_b(a)",
+                xy=(p[0], p[1]),
+                xytext=(p[0] + perp[0], p[1] + perp[1]),
+                color="#555", fontsize=9,
+                arrowprops=dict(arrowstyle="-", color="#aaa", lw=0.8),
+            )
 
         ax.set_xlim(-7, 7)
         ax.set_ylim(-7, 7)

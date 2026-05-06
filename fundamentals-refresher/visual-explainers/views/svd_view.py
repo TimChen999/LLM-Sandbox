@@ -8,6 +8,8 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
+from views._helpers import LabeledSlider
+
 
 class SVDDemo(ttk.Frame):
     def __init__(self, master: tk.Misc) -> None:
@@ -29,18 +31,18 @@ class SVDDemo(ttk.Frame):
             ("A[0,0]", self.a11), ("A[0,1]", self.a12),
             ("A[1,0]", self.a21), ("A[1,1]", self.a22),
         ]:
-            box = ttk.Frame(bar)
-            ttk.Label(box, text=label).pack()
-            ttk.Scale(box, from_=-3, to=3, variable=var, orient="horizontal", length=120,
-                      command=lambda *_: self._recompute()).pack()
-            box.pack(side="left", padx=6)
+            LabeledSlider(
+                bar, label, var, -3, 3, length=120,
+                command=lambda *_: self._recompute(),
+            ).pack(side="left", padx=6)
 
         ttk.Separator(bar, orient="vertical").pack(side="left", fill="y", padx=8)
         ttk.Button(bar, text="▶ Animate Vᵀ → Σ → U", command=self._animate).pack(side="left", padx=4)
 
-        ttk.Label(bar, text="stage:").pack(side="left", padx=(12, 4))
-        ttk.Scale(bar, from_=0, to=3, variable=self.t, orient="horizontal", length=180,
-                  command=lambda *_: self._redraw()).pack(side="left")
+        LabeledSlider(
+            bar, "stage  (0=in · 1=Vᵀ · 2=Σ · 3=U)", self.t, 0, 3, length=240,
+            command=lambda *_: self._redraw(), fmt="{:.2f}",
+        ).pack(side="left", padx=(12, 4))
 
     def _build_plot(self) -> None:
         derivation = ttk.LabelFrame(self, text="  Calculation  ", padding=(12, 8))

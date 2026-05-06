@@ -8,6 +8,8 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
+from views._helpers import LabeledSlider
+
 
 class PSDDemo(ttk.Frame):
     def __init__(self, master: tk.Misc) -> None:
@@ -22,12 +24,11 @@ class PSDDemo(ttk.Frame):
     def _build_controls(self) -> None:
         bar = ttk.Frame(self, padding=(8, 8))
         bar.pack(side="top", fill="x")
-        for label, var in [("A[0,0]", self.a11), ("A[1,1]", self.a22), ("A[0,1]=A[1,0]", self.a12)]:
-            box = ttk.Frame(bar)
-            ttk.Label(box, text=label).pack()
-            ttk.Scale(box, from_=-3, to=3, variable=var, orient="horizontal", length=140,
-                      command=lambda *_: self._recompute()).pack()
-            box.pack(side="left", padx=8)
+        for label, var in [("A[0,0]", self.a11), ("A[1,1]", self.a22), ("A[0,1] = A[1,0]", self.a12)]:
+            LabeledSlider(
+                bar, label, var, -3, 3, length=160,
+                command=lambda *_: self._recompute(),
+            ).pack(side="left", padx=8)
         ttk.Button(bar, text="Make PSD (random Lᵀ L)", command=self._make_psd).pack(side="left", padx=8)
 
     def _make_psd(self) -> None:

@@ -17,31 +17,19 @@ A native Tkinter desktop app: 10 ordered linear-algebra topics, each with a shor
 
 Each topic page has two tabs: **Demo** (visual + calculations) and **Practice** (random problems with reveal-answer).
 
-## Setup (one time)
+## Run it (the one button)
 
-From this directory, in PowerShell:
+**Double-click `Launch.bat`.** That's it.
 
-```powershell
-python -m venv .venv
-.venv\Scripts\pip install -r requirements.txt
-```
+On first run it sets up the virtual environment, installs dependencies, builds the standalone `.exe`, and launches the app — about 1–3 minutes one-time. On every subsequent launch it starts instantly. If you edit the source code, the launcher detects the change and rebuilds automatically before launching.
 
-## Run during development
+Requires Python 3.10+ on your PATH for the first-time setup.
 
-Double-click `launch_dev.bat`, or:
-```powershell
-.venv\Scripts\python app.py
-```
+## Other ways to run (optional)
 
-## Build a standalone .exe
-
-Double-click `build.bat`. After ~1–3 minutes you'll get:
-
-```
-dist\visual-explainers.exe
-```
-
-That `.exe` is fully standalone — copy it anywhere, double-click it, the app runs. No Python install, no venv, no terminal window. Rebuild after code changes by running `build.bat` again.
+- `dist\visual-explainers.exe` — once built by `Launch.bat`, this is fully standalone. Copy it anywhere; no Python needed. Make a desktop shortcut if you like.
+- `launch_dev.bat` — runs from source via the venv (skips the build step). Faster iteration when changing code.
+- `build.bat` — verbose rebuild for debugging build failures.
 
 ## Run the tests
 

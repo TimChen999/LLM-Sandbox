@@ -8,6 +8,8 @@ import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
+from views._helpers import LabeledSlider
+
 
 class MatrixCalculusDemo(ttk.Frame):
     def __init__(self, master: tk.Misc) -> None:
@@ -26,21 +28,21 @@ class MatrixCalculusDemo(ttk.Frame):
     def _build_controls(self) -> None:
         bar = ttk.Frame(self, padding=(8, 8))
         bar.pack(side="top", fill="x")
-        ttk.Label(bar, text="A (sym):").pack(side="left", padx=(0, 4))
+        ttk.Label(bar, text="A (sym):", font=("Segoe UI", 9, "bold")).pack(side="left", padx=(0, 6))
         for label, var in [("A[0,0]", self.a11), ("A[1,1]", self.a22), ("A[0,1]", self.a12)]:
-            box = ttk.Frame(bar); ttk.Label(box, text=label, font=("Segoe UI", 8)).pack()
-            ttk.Scale(box, from_=-2, to=3, variable=var, orient="horizontal", length=110,
-                      command=lambda *_: self._recompute()).pack()
-            box.pack(side="left", padx=6)
-        ttk.Separator(bar, orient="vertical").pack(side="left", fill="y", padx=8)
-        ttk.Label(bar, text="b:").pack(side="left", padx=(0, 4))
+            LabeledSlider(
+                bar, label, var, -2, 3, length=120,
+                command=lambda *_: self._recompute(),
+            ).pack(side="left", padx=4)
+        ttk.Separator(bar, orient="vertical").pack(side="left", fill="y", padx=10)
+        ttk.Label(bar, text="b:", font=("Segoe UI", 9, "bold")).pack(side="left", padx=(0, 6))
         for label, var in [("b.x", self.bx), ("b.y", self.by)]:
-            box = ttk.Frame(bar); ttk.Label(box, text=label, font=("Segoe UI", 8)).pack()
-            ttk.Scale(box, from_=-3, to=3, variable=var, orient="horizontal", length=100,
-                      command=lambda *_: self._recompute()).pack()
-            box.pack(side="left", padx=6)
-        ttk.Label(bar, text="Click in the plot to set the point x.",
-                  font=("Segoe UI", 9, "italic"), foreground="#666").pack(side="left", padx=12)
+            LabeledSlider(
+                bar, label, var, -3, 3, length=120,
+                command=lambda *_: self._recompute(),
+            ).pack(side="left", padx=4)
+        ttk.Label(bar, text="↓ Click anywhere in the plot to set x.",
+                  font=("Segoe UI", 9, "italic"), foreground="#0d7d2e").pack(side="left", padx=14)
 
     def _build_plot(self) -> None:
         derivation = ttk.LabelFrame(self, text="  Calculation  ", padding=(12, 8))
